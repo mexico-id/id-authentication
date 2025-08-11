@@ -166,7 +166,11 @@ public class CredentialIssueanceCallbackController {
 
 	private ResponseWrapper<?> handleEvent(EventModel eventModel, Errors e)
 			throws IDDataValidationException, IdAuthenticationBusinessException {
+		logger.debug("Starting handleEvent - about to validate errors for eventModel: {}",
+				eventModel != null ? eventModel.getEvent().getId(): "null");
 		DataValidationUtil.validate(e);
+		logger.debug("Validation successful for eventModel: {}",
+				eventModel != null ? eventModel.getEvent().getId() : "null");
 		handleEvents(eventModel);
 		return new ResponseWrapper<>();
 	}
