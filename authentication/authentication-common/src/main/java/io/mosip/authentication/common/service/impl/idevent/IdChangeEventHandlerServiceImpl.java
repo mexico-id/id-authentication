@@ -183,9 +183,19 @@ public class IdChangeEventHandlerServiceImpl implements IdChangeEventHandlerServ
 		Event event = eventModel.getEvent();
 		Map<String, Object> additionalData = event.getData();
 		String idHash = (String) additionalData.get(ID_HASH);
+		if (idHash == null) {
+			mosipLogger.warn("ID_HASH is missing in event additional data.");
+			return;
+		} else {
+			mosipLogger.debug("ID_HASH found in event: {}", idHash);
+		}
 		Optional<IdentityEntity> identityEntityOpt = identityCacheRepo.findById(idHash);
 		if(identityEntityOpt.isPresent()) {
+			mosipLogger.info("IdentityEntity found in DB for idHash: {}", idHash);
 			identityCacheRepo.delete(identityEntityOpt.get());
+			mosipLogger.info("Successfully deleted IdentityEntity for idHash: {}", idHash);
+		}  else {
+		mosipLogger.warn("No IdentityEntity found in DB for idHash: {}", idHash);
 		}
 	}
 	
